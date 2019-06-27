@@ -114,7 +114,7 @@ const ip = settings.Environment.IpAddress;
 const port = settings.Environment.Port;
 
 app.set("ip", ip);
-app.set("port", port);
+app.set("port", process.env.PORT || port);
 
 const server = app.listen(app.get("port"), app.get("ip"), function () {
 	registration.register(ip, port);
