@@ -59,3 +59,13 @@ typings/
 
 # next.js build output
 .next
+
+# VS
+.vs
+.vscode
+*/bin/
+*/obj/
+
+*.user
+*.cache
+*/public/temp/

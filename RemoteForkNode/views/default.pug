@@ -1,0 +1,39 @@
+doctype html
+html
+  head
+    title #{title}
+    link(rel='stylesheet', href='/css/style.min.css')
+    link(rel='stylesheet', href='/assets/css/bootstrap.min.css')
+
+    meta(name="viewport" content="width=device-width, initial-scale=1")
+  body
+    main
+      block navbar
+      headernav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+        a.navbar-brand(href='#') #{title}
+        button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
+          span.navbar-toggler-icon
+        
+        .collapse.navbar-collapse(id='navbarSupportedContent')
+          ul.navbar-nav.mr-auto
+            li.nav-item.active
+              a.nav-link(href='/#') Настройки
+            li.nav-item
+              a.nav-link(href='/dlna') DLNA
+            li.nav-item
+              a.nav-link(href='/plugins') Плагины
+            li.nav-item
+              a.nav-link(href='/userlinks') Пользовательские ссылки
+          ul.navbar-nav.float-right
+            li.nav-item
+              a.nav-link(href='/test') Проверка сервера
+ 
+  
+      block content
+
+      block footer
+        p &copy; 2017-2019 - RemoteFork
+
+      block scripts
+        script(src='/assets/jquery.min.js')
+        script(src='/assets/js/bootstrap.min.js')

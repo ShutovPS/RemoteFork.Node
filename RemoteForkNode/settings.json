@@ -1,0 +1,39 @@
+{
+  "Environment": {
+    "IpAddress": "0.0.0.0",
+    "Port": 8027,
+    "UseAutoAddress": true,
+    "ListenLocalhost": true,
+    "UserAgent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
+    "LogLevel": 5,
+    "DeveloperMode": false,
+    "CheckUpdate": true
+  },
+  "Proxy": {
+    "Enable": false,
+    "NotDefaultEnable": false,
+    "Address": null,
+    "Port": 0,
+    "UserName": null,
+    "Password": null,
+    "Type": 0
+  },
+  "Plugins": {
+    "Enable": true,
+    "EnablePlugins": [],
+    "ShownIcons": true
+  },
+  "Dlna": {
+    "Enable": true,
+    "Directories": [ "D://" ],
+    "FileExtensions": [ ".mp4", "mov" ]
+  },
+  "AceStream": {
+    "Enable": true,
+    "UseAutoAddress": true,
+    "IpAddress": "0.0.0.0",
+    "Port": 6878
+  },
+  "UserUrls": [],
+  "StartPageModernStyle": false
+}
