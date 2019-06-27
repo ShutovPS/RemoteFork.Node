@@ -10,6 +10,10 @@
     "name": "fd_crash"
   },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ShutovPS/RemoteFork.Node.git"
+  },
   "dependencies": {
     "body-parser": "^1.15.0",
     "bootstrap": "^4.3.1",

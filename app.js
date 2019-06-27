@@ -120,8 +120,3 @@ const server = app.listen(app.get("port"), app.get("ip"), function () {
 	registration.register(ip, port);
     debug(`Express server listening on port ${server.address().port}`);
 });
-
-const serverTest = app.listen("80", app.get("ip"), function () {
-    debug(`Express test server listening on port ${serverTest.address().port}`);
-});
-
