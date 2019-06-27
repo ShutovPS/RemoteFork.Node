@@ -19,6 +19,8 @@ function curlRequest(link, callback) {
         const verbose = link.includes(" -i");
         const autoRedirect = link.includes(" -L");
 
+        const headers = [];
+
         let regex = /(?:")(.*?)(?:")/;
 
         const url = regex.exec(link)[1];
@@ -29,18 +31,13 @@ function curlRequest(link, callback) {
 
         let match = regex.exec(link);
 
-        const valueRegex = /(?:")(.+?)(?:\s*\:\s*)(.+?)(?:")/;
+        const valueRegex = /(.+?)(?:\s*\:\s*)(.+)/;
 
         while (match != undefined) {
-            console.log(match[1]);
-
             const m = valueRegex.exec(match[1]);
 
             if (m != undefined) {
-                const key = m[1];
-                const value = m[2];
-
-                console.log(key.trim(), value.trim());
+                headers[m[1].trim()] = m[2].trim();
             }
 
             match = regex.exec(link);

@@ -61,6 +61,7 @@
     <Content Include="routes\main.js" />
     <Content Include="settings.json" />
     <Content Include="views\default.pug" />
+    <Content Include="views\error.pug" />
     <Content Include="views\index.pug" />
   </ItemGroup>
   <ItemGroup>
