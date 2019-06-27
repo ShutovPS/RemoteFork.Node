@@ -19,37 +19,37 @@ function curlRequest(link, callback) {
         const verbose = link.includes(" -i");
         const autoRedirect = link.includes(" -L");
 
-        let regex = /(?<=")(.*?)(?=")/g;
+        let regex = /(?:")(.*?)(?:")/;
 
-        const url = link.match(regex)[0];
+        const url = regex.exec(link)[1];
 
-        regex = /(?<=-H\s")(.*?)(?=")/gm;
+        console.log("url", url);
 
-        const matches = link.match(regex);
+        regex = /(?:-H\s")(.*?)(?:")/gm;
 
-        const headers = [];
+        let match = regex.exec(link);
 
-        if (matches != null && matches.length !== 0) {
-            const keyRegex = /(.+?)(?=\s*\:\s*)/g;
-            const valueRegex = /(?<=\s*\:\s*)(.+)/g;
+        const valueRegex = /(?:")(.+?)(?:\s*\:\s*)(.+?)(?:")/;
 
-            for (let i = 0; i < matches.length; i++) {
-                const key = matches[i].match(keyRegex)[0];
-                const value = matches[i].match(valueRegex)[0];
+        while (match != undefined) {
+            console.log(match[1]);
 
-                if (key != undefined &&
-                    key.trim() &&
-                    value != undefined &&
-                    value.trim()) {
-                    headers[key.trim()] = value.trim();
-                }
+            const m = valueRegex.exec(match[1]);
+
+            if (m != undefined) {
+                const key = m[1];
+                const value = m[2];
+
+                console.log(key.trim(), value.trim());
             }
+
+            match = regex.exec(link);
         }
 
         if (link.includes("--data")) {
-            regex = /(?<=--data\s")(.*?)(?=\s*")/gm;
+            regex = /(?:--data\s")(.*?)(?=\s*")/gm;
 
-            const dataString = link.match(regex)[0];
+            const dataString = link.match(regex)[1];
 
             postRequest(url, callback, dataString, headers, autoRedirect);
         } else if (verbose) {
