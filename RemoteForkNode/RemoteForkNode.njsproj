@@ -48,6 +48,7 @@
     <Content Include="libman.json" />
     <Content Include="package.json" />
     <Content Include="plugins\nnmclub\plugin.js" />
+    <Content Include="Procfile" />
     <Content Include="public\css\style.css" />
     <Content Include="public\css\style.min.css" />
     <Content Include="public\images\favicon.ico" />
