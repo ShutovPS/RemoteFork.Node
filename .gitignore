@@ -73,3 +73,5 @@ typings/
 bin/
 
 \.idea/
+
+settings\.json

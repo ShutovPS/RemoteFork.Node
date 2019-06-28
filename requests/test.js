@@ -2,13 +2,15 @@
 
 module.exports.KEY = "/test";
 
-const pjson = require("../package.json");
-const settings = require("../settings.json");
+const httpStatus = require("http-status-codes");
 
 const express = require("express");
 const router = express.Router();
 
 module.exports.router = router;
+
+const pjson = require("../package.json");
+const settings = require("../settings.json");
 
 router.get("/",
     function (req, res) {
@@ -23,6 +25,6 @@ router.get("/",
 
         const response = `<html><h1>ForkPlayer DLNA Work!</h1><br><b>RemoteFork Server. v.${pjson.version}</b>${ace}</html>`;
 
-		res.writeHead(200, headers);
+		res.writeHead(httpStatus.OK, headers);
 		res.end(response);
     });

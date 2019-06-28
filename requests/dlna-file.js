@@ -2,6 +2,8 @@
 
 const KEY = "/dlna_file";
 
+const httpStatus = require("http-status-codes");
+
 const mime = require("mime-type/with-db");
 
 const fs = require("fs");
@@ -55,7 +57,7 @@ router.get("/", function (req, res) {
     } else {
       console.log(`No Request Header - Serving Whole Video With Total Size: ${totalSize}`);
 
-      res.writeHead(200, {
+      res.writeHead(httpStatus.OK, {
         'Content-Length': totalSize,
         'Content-Type': mime.lookup(localPath)
       });

@@ -2,16 +2,18 @@
 
 module.exports.KEY = "/user_urls";
 
-const settings = require("../settings.json");
-const configs = require("../configs.js");
-
-const FileItem = require("../playlist/file-item");
-const PlayList = require("../playlist/playlist");
+const httpStatus = require("http-status-codes");
 
 const express = require("express");
 const router = express.Router();
 
 module.exports.router = router;
+
+const settings = require("../settings.json");
+const configs = require("../configs.js");
+
+const FileItem = require("../playlist/file-item");
+const PlayList = require("../playlist/playlist");
 
 router.get("/",
     function (req, res) {
@@ -35,7 +37,7 @@ router.get("/",
 
         const json = JSON.stringify(playList);
 
-        res.writeHead(200, headers);
+        res.writeHead(httpStatus.OK, headers);
 		res.end(json);
     });
 

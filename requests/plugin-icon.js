@@ -3,6 +3,7 @@
 const KEY = "/plugin_icon";
 
 const request = require("request");
+const httpStatus = require("http-status-codes");
 const mime = require("mime-type/with-db");
 
 const fs = require("fs");
@@ -26,13 +27,13 @@ router.get("/",
             const scriptUrl = "https://img.icons8.com/dusk/384/night-camera.png";
 
             if (fs.existsSync(filePath)) {
-                res.statusCode = 200;
+                res.statusCode = httpStatus.OK;
                 res.setHeader("Content-type", mime.lookup(filePath));
                 fs.createReadStream(filePath).pipe(res);
                 return;
             } else {
                 const sendFile = (data) => {
-                    res.statusCode = 200;
+                    res.statusCode = httpStatus.OK;
                     res.setHeader("Content-Type", mime.lookup(filePath));
                     res.end(data);
                 }
@@ -71,7 +72,7 @@ router.get("/",
                             res.statusCode = response.statusCode;
                             res.setHeader("Content-Type", response.headers && response.headers["Content-Type"]);
                         } else {
-                            res.statusCode = 500;
+                            res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
                         }
 
                         res.end(body);
@@ -86,8 +87,11 @@ router.get("/",
                 request(options, function(error, response, body) {
                     if (error) {
                         console.error(error);
+
+                        res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+                        res.error = error;
                         res.end();
-                    }  else if (response.statusCode != 200) {
+                    }  else if (response.statusCode !== httpStatus.OK) {
                         res.sendStatus(response.statusCode);
                         res.end(body);
                     } else {
@@ -97,6 +101,7 @@ router.get("/",
                 });
             }
         } else {
+            res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
             res.end();
         }
     });

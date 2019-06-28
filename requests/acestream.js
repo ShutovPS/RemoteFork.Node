@@ -8,7 +8,9 @@ const FileItem = require("../playlist/file-item");
 const PlayList = require("../playlist/playlist");
 
 const path = require("path");
+
 const request = require("request");
+const httpStatus = require("http-status-codes");
 
 const express = require("express");
 const router = express.Router();
@@ -25,7 +27,7 @@ router.post("/",
 
 		const source = getFileList(url);
 
-        res.writeHead(200, headers);
+        res.writeHead(httpStatus.OK, headers);
 		res.end(source);
 	});
 
@@ -39,7 +41,7 @@ router.get("/",
 
         const source = getFileList(url);
 
-        res.writeHead(200, headers);
+        res.writeHead(httpStatus.OK, headers);
         res.end(source);
 	});
 

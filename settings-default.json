@@ -19,17 +19,17 @@
     "Type": 0
   },
   "Plugins": {
-    "Enable": true,
+    "Enable": false,
     "EnablePlugins": [],
-    "ShownIcons": true
+    "ShownIcons": false
   },
   "Dlna": {
-    "Enable": true,
-    "Directories": [ "D://" ],
-    "FileExtensions": [ ".mp4", "mov" ]
+    "Enable": false,
+    "Directories": [],
+    "FileExtensions": []
   },
   "AceStream": {
-    "Enable": true,
+    "Enable": false,
     "UseAutoAddress": true,
     "IpAddress": "0.0.0.0",
     "Port": 6878

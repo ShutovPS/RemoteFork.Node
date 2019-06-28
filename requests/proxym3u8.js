@@ -2,9 +2,10 @@
 
 const KEY = "/proxym3u8";
 
-const mime = require("mime-type/with-db");
-
 const request = require("request");
+const httpStatus = require("http-status-codes");
+
+const mime = require("mime-type/with-db");
 
 const express = require("express");
 const router = express.Router();
@@ -20,6 +21,7 @@ const opend = "OPEND:";
 
 function processResponse(res, url) {
     if (url == undefined) {
+        res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
         res.end();
 
         return;
@@ -96,7 +98,7 @@ function processResponse(res, url) {
         if (!error) {
             console.log(`response statusCode: ${response.statusCode}`);
         } else {
-            console.log(`response error: ${error}`);
+            console.error(error);
         }
     })
     .on("data", function(data) {

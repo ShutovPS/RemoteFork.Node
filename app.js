@@ -1,5 +1,20 @@
 ﻿"use strict";
 
+const httpStatus = require("http-status-codes");
+
+const debug = require("debug");
+
+const path = require("path");
+const express = require("express");
+const favicon = require("serve-favicon");
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+
+const settingsManager = require("./settings-manager.js");
+
+settingsManager.checkSettings();
+
 const settings = require("./settings.json");
 
 const main = require("./routes/main");
@@ -20,15 +35,6 @@ const proxym3u8 = require("./requests/proxym3u8");
 const forkPlayer = require("./requests/forkplayer");
 
 const registration = require("./server-registration");
-
-const debug = require("debug");
-
-const express = require("express");
-const path = require("path");
-const favicon = require("serve-favicon");
-const logger = require("morgan");
-const cookieParser = require("cookie-parser");
-const bodyParser = require("body-parser");
 
 const app = express();
 
@@ -90,7 +96,7 @@ app.use(function(req, res, next) {
 // will print stacktrace
 if (app.get("env") === "development") {
     app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
+        res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
         res.render("error",
             {
                 title: "Error",
@@ -103,7 +109,7 @@ if (app.get("env") === "development") {
 // production error handler
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
-	res.status(err.status || 500);
+	res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
 	res.render("error",
 		{
 			title: "Error",

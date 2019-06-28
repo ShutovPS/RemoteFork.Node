@@ -3,6 +3,7 @@
 const KEY = "/parserlink";
 
 const request = require("request");
+const httpStatus = require("http-status-codes");
 
 const iconv = require('iconv-lite');
 const jschardet = require('jschardet');
@@ -14,49 +15,43 @@ module.exports.KEY = KEY;
 module.exports.router = router;
 
 function curlRequest(link, callback) {
-    if (link.startsWith("curlorig")) {
-        link = link.substring(9);
+    const verbose = link.includes(" -i");
+    const autoRedirect = link.includes(" -L");
 
-        getRequest(link, callback);
+    const headers = [];
+
+    let regex = /(?:")(.*?)(?:")/;
+
+    const url = regex.exec(link)[1];
+
+    console.log("url", url);
+
+    regex = /(?:-H\s")(.*?)(?:")/gm;
+
+    let match = regex.exec(link);
+
+    const valueRegex = /(.+?)(?:\s*\:\s*)(.+)/;
+
+    while (match != undefined) {
+        const m = valueRegex.exec(match[1]);
+
+        if (m != undefined) {
+            headers[m[1].trim()] = m[2].trim();
+        }
+
+        match = regex.exec(link);
+    }
+
+    if (link.includes("--data")) {
+        regex = /(?:--data\s")(.*?)(?=\s*")/gm;
+
+        const dataString = link.match(regex)[1];
+
+        postRequest(url, callback, dataString, headers, autoRedirect);
+    } else if (verbose) {
+        headRequest(url, callback, headers, autoRedirect);
     } else {
-        const verbose = link.includes(" -i");
-        const autoRedirect = link.includes(" -L");
-
-        const headers = [];
-
-        let regex = /(?:")(.*?)(?:")/;
-
-        const url = regex.exec(link)[1];
-
-        console.log("url", url);
-
-        regex = /(?:-H\s")(.*?)(?:")/gm;
-
-        let match = regex.exec(link);
-
-        const valueRegex = /(.+?)(?:\s*\:\s*)(.+)/;
-
-        while (match != undefined) {
-            const m = valueRegex.exec(match[1]);
-
-            if (m != undefined) {
-                headers[m[1].trim()] = m[2].trim();
-            }
-
-            match = regex.exec(link);
-        }
-
-        if (link.includes("--data")) {
-            regex = /(?:--data\s")(.*?)(?=\s*")/gm;
-
-            const dataString = link.match(regex)[1];
-
-            postRequest(url, callback, dataString, headers, autoRedirect);
-        } else if (verbose) {
-            headRequest(url, callback, headers, autoRedirect);
-        } else {
-            getRequest(url, callback, headers, autoRedirect);
-        }
+        getRequest(url, callback, headers, autoRedirect);
     }
 }
 
@@ -82,11 +77,9 @@ function getOptions(method, link, heads, autoRedirect, data) {
 function sendRequest(options, callback, responseProcess) {
     request(options,
         function(error, response, body) {
-            if (error) {
-                callback(false, error);
-            } else {
-                var result = "";
+            var result = "";
 
+            if (!error) {
                 try {
                     let charSet = jschardet.detect(body);
                     console.log("charSet", charSet);
@@ -99,8 +92,8 @@ function sendRequest(options, callback, responseProcess) {
                 if (responseProcess != undefined) {
                     result = responseProcess(response, result);
                 }
-                callback(true, result);
             }
+            callback(error, response, result);
         });
 }
 
@@ -145,23 +138,27 @@ function parselink(res, link) {
     if (requestStrings != undefined) {
         console.log("parselink:", requestStrings[0]);
 
-        const onResponse = (result, response) => {
-            if (result) {
+        const onResponse = (error, response, body) => {
+            if (!error) {
                 let result = "";
 
                 if (requestStrings.length === 1) {
-                    result = response;
+                    result = body;
                 } else {
                     if (!requestStrings[1].includes(".*?")) {
                         if (requestStrings[1] == undefined && requestStrings[2] == undefined) {
-                            result = response;
+                            result = body;
                         } else {
-                            let ind = response.indexOf(requestStrings[1]);
+                            let ind = body.indexOf(requestStrings[1]);
 
-                            if (ind !== -1)
+                            if (ind !== -1) {
                                 ind += requestStrings[1].length;
-                            const ind2 = response.indexOf(requestStrings[2], ind);
-                            result = ind2 === -1 ? "" : response.substring(ind, ind2 - ind);
+                                const ind2 = body.indexOf(requestStrings[2], ind);
+
+                                if (ind2 !== -1) {
+                                    result = body.substring(ind, ind2 - ind);
+                                }
+                            }
                         }
                     } else {
                         const pattern = requestStrings[1] + "(.*?)" + requestStrings[2];
@@ -169,8 +166,8 @@ function parselink(res, link) {
                         console.log("ParseLinkRequest: ", pattern);
 
                         const regex = new RegExp(pattern, "m");
-                        if (regex.test(response)) {
-                            const match = regex.match(response);
+                        if (regex.test(body)) {
+                            const match = regex.match(body);
 
                             if (match != undefined && match.length !== 0) {
                                 result = match[1];
@@ -179,13 +176,23 @@ function parselink(res, link) {
                     }
                 }
 
+                // if (response.headers["content-type"]) {
+                //     console.log(response.headers["content-type"]);
+                // }
+
+                res.set({ 'content-type': 'text/html; charset=utf-8' });
                 res.end(result);
             } else {
-                console.error(response);
-
-                res.statusCode = 500;
-                res.error = response;
-                res.end();
+                console.error(error);
+                
+                if (response && response.statusCode) {
+                    res.statusCode = response.statusCode;
+                } else {
+                    res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+                }
+                
+                res.error = error;
+                res.end(body);
             }
         }
 
@@ -195,6 +202,7 @@ function parselink(res, link) {
             getRequest(requestStrings[0], onResponse);
         }
     } else {
+        res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
         res.end();
     }
 }
@@ -209,9 +217,10 @@ function onProcessRequest(req, res, url) {
     const parseurl = (res, url) => {
         console.log("parseurl:", url);
 
-        if (url.trim()) {
+        if (url && url.trim()) {
             parselink(res, url);
         } else {
+            res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
             res.end();
         }
     }

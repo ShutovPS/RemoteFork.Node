@@ -2,6 +2,8 @@
 
 const KEY = "/dlna_directory";
 
+const httpStatus = require("http-status-codes");
+
 const path = require("path");
 const fs = require("fs");
 const pretty = require('prettysize');
@@ -113,7 +115,7 @@ router.get("/",
 
         const json = JSON.stringify(playList);
 
-        res.writeHead(200, headers);
+        res.writeHead(httpStatus.OK, headers);
         res.end(json);
     });
 

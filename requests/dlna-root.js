@@ -2,8 +2,9 @@
 
 module.exports.KEY = "/treeview";
 
-const path = require("path");
+const httpStatus = require("http-status-codes");
 
+const path = require("path");
 const fs = require("fs");
 
 const express = require("express");
@@ -34,7 +35,7 @@ router.get("/",
 
 		if (settings.UserUrls && settings.UserUrls.length !== 0) {
 			const item = new DirectoryItem();
-			item.Title = "Пользовательские ссылки";
+			item.Title = "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ";
             item.Link = userUrls.createLink();
 
 			playList.Items.push(item);
@@ -57,6 +58,6 @@ router.get("/",
 
         const json = JSON.stringify(playList);
 
-        res.writeHead(200, headers);
+        res.writeHead(httpStatus.OK, headers);
 		res.end(json);
 	});
