@@ -46,10 +46,10 @@ router.get("/",
 module.exports.getContentId = function (torrentData) {
     request.post(url, torrentData,
 		function (error, response, body) {
-			if (body.trim() != undefined) {
+			if (body.trim()) {
                 const content = JSON.parse(body);
 
-                if (content.Error != undefined) {
+                if (content.Error) {
                     return content.ContentID;
 				}
             }
@@ -75,10 +75,10 @@ module.exports.getFileList = function(url) {
 
 		request(url,
             function (error, response, body) {
-                if (body.trim() != undefined) {
+                if (body.trim()) {
                     const files = JSON.parse(body);
 
-                    if (files.Error != undefined) {
+                    if (files.Error) {
 						return files.Result;
 					}
                 }
@@ -106,10 +106,10 @@ module.exports.getFileList = function (key, type) {
 
     request(url,
 		function (error, response, body) {
-            if (body.trim() != undefined) {
+            if (body.trim()) {
                 const files = JSON.parse(body);
 
-                if (files.Error != undefined) {
+                if (files.Error) {
 					return files.Result;
 				}
             }

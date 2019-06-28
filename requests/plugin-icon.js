@@ -14,7 +14,7 @@ const router = express.Router();
 module.exports.KEY = KEY;
 module.exports.router = router;
 
-const iconsPath = "plugins/icons";
+const iconsPath = "public/temp/plugins/";
 
 router.get("/",
     function(req, res) {
@@ -23,7 +23,7 @@ router.get("/",
         if (pluginId != undefined && pluginId.trim()) {
             const filePath = path.join(iconsPath, pluginId + ".png");
 
-            const scriptUrl = "https://img.iconsghhg8.com/dusk/384/nightghgd-camera.png";
+            const scriptUrl = "https://img.icons8.com/dusk/384/night-camera.png";
 
             if (fs.existsSync(filePath)) {
                 res.statusCode = 200;
@@ -78,23 +78,23 @@ router.get("/",
                     }
                 }
 
-                let onReceivedData = false;
-
-                function onReceiveData(data) {
-                    if (!onReceivedData) {
-                        onReceivedData = true;
-
-                        saveFile(data);
-                        sendFile(data);
-                    }
+                let options = {
+                    url: scriptUrl,
+                    encoding: null
                 }
 
-                request(scriptUrl, callback)
-                    .on("data", onReceiveData)
-                    .on("response",
-                        function(response) {
-                            response.on("data", onReceiveData);
-                        });
+                request(options, function(error, response, body) {
+                    if (error) {
+                        console.error(error);
+                        res.end();
+                    }  else if (response.statusCode != 200) {
+                        res.sendStatus(response.statusCode);
+                        res.end(body);
+                    } else {
+                        saveFile(body);
+                        sendFile(body);
+                    }
+                });
             }
         } else {
             res.end();

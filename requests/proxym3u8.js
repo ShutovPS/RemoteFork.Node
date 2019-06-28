@@ -19,101 +19,102 @@ const opt = "OPT:";
 const opend = "OPEND:";
 
 function processResponse(res, url) {
-        const headers = [];
+    if (url == undefined) {
+        res.end();
 
-        let ts = "";
+        return;
+    }
 
-        if (url.startsWith("B")) {
-            url = url.substring(1);
+    const headers = [];
 
-            let endUrl = "";
+    let ts = "";
 
-            if (url.includes(endbase64)) {
-                const ind = url.indexOf(endbase64);
+    if (url.startsWith("B")) {
+        url = url.substring(1);
 
-                endUrl = url.substring(ind + endbase64.length);
-                url = url.substring(0, ind);
-            }
+        let endUrl = "";
 
-            url = Buffer.from(url, "base64").toString("utf8") + endUrl;
+        if (url.includes(endbase64)) {
+            const ind = url.indexOf(endbase64);
+
+            endUrl = url.substring(ind + endbase64.length);
+            url = url.substring(0, ind);
         }
 
-        if (url.includes(opt)) {
-            if (url.includes(opend)) {
-                if (!url.endsWith(opend)) {
-                    ts = url.substring(url.indexOf(opend) + opend.length);
-                }
-                url = url.substring(0, url.indexOf(opend));
+        url = Buffer.from(url, "base64").toString("utf8") + endUrl;
+    }
+
+    if (url.includes(opt)) {
+        if (url.includes(opend)) {
+            if (!url.endsWith(opend)) {
+                ts = url.substring(url.indexOf(opend) + opend.length);
             }
+            url = url.substring(0, url.indexOf(opend));
+        }
 
-            const params = url.substring(url.indexOf(opt) + opt.length);
+        const params = url.substring(url.indexOf(opt) + opt.length);
 
-            if (params.includes("--")) {
-                const matches = params.split("--");
+        if (params.includes("--")) {
+            const matches = params.split("--");
 
-                if (matches != undefined && matches.length !== 0) {
+            if (matches != undefined && matches.length !== 0) {
 
-                    for (let i = 0; i < matches.length; i++) {
-                        const k = matches[i];
-                        const v = matches[++i];
+                for (let i = 0; i < matches.length; i++) {
+                    const k = matches[i];
+                    const v = matches[++i];
 
-                        if (k.trim() != undefined && v != undefined) {
-                            headers[k] = v;
-                        }
+                    if (k.trim() && v != undefined) {
+                        headers[k] = v;
                     }
                 }
             }
-
-            url = url.substring(0, url.indexOf(opt));
         }
-        console.log(url);
-        if (!headers.hasOwnProperty("ContentType")) {
-            if (ts.trim() != undefined) {
-                url = url.substring(0, url.lastIndexOf("/") + 1) + ts;
 
-                res.ContentType = mime.lookup(".ts");
-            } else {
-                res.ContentType = mime.lookup(".m3u8");
-            }
+        url = url.substring(0, url.indexOf(opt));
+    }
+    console.log(url);
+
+    if (!headers.hasOwnProperty("ContentType")) {
+        if (ts.trim()) {
+            url = url.substring(0, url.lastIndexOf("/") + 1) + ts;
+
+            res.ContentType = mime.lookup(".ts");
         } else {
-            res.ContentType = headers["ContentType"];
+            res.ContentType = mime.lookup(".m3u8");
         }
+    } else {
+        res.ContentType = headers["ContentType"];
+    }
 
-        const options = {
-            url: url,
-            headers: headers
-        };
+    const options = {
+        url: url,
+        headers: headers,
+        encoding: null
+    };
 
-        function callback(error, response, body) {
-            if (!error) {
-                console.log(`response statusCode: ${response.statusCode}`);
-            } else {
-                console.log(`response error: ${error}`);
-            }
+    request(options, function (error, response, body) {
+        if (!error) {
+            console.log(`response statusCode: ${response.statusCode}`);
+        } else {
+            console.log(`response error: ${error}`);
         }
-
-        function dataCallback(data) {
-            res.end(data);
-        }
-
-        request(options, callback)
-            .on("data", dataCallback)
-            .on("response",
-                function (response) {
-                    response.on("data", dataCallback);
-                });
+    })
+    .on("data", function(data) {
+        res.write(data);
+    })
+    .on("end", function(data) {
+        res.end(data);
+    });
 }
 
 router.get("/",
     function (req, res) {
-        const url = req.query.link;
+        let url = req.query.link;
+
+        if (url == undefined) {
+            url = req.baseUrl.substring(proxym3u8.length + 1);
+        }
 
         processResponse(res, url);
     });
 
-router.get("/+",
-    function (req, res) {
-        const url = req.url.substring(proxym3u8.length + 1);
-
-        processResponse(res, url);
-    });

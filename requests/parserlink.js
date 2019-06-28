@@ -4,6 +4,9 @@ const KEY = "/parserlink";
 
 const request = require("request");
 
+const iconv = require('iconv-lite');
+const jschardet = require('jschardet');
+
 const express = require("express");
 const router = express.Router();
 
@@ -65,7 +68,8 @@ function getOptions(method, link, heads, autoRedirect, data) {
         method: method,
         url: link,
         headers: heads,
-        followRedirect: autoRedirect
+        followRedirect: autoRedirect,
+        encoding: null
     };
 
     if (data != undefined) {
@@ -81,10 +85,21 @@ function sendRequest(options, callback, responseProcess) {
             if (error) {
                 callback(false, error);
             } else {
-                if (responseProcess != undefined) {
-                    body = responseProcess(response, body);
+                var result = "";
+
+                try {
+                    let charSet = jschardet.detect(body);
+                    console.log("charSet", charSet);
+    
+                    result = iconv.decode(body, charSet.encoding);
+                } catch (e) {
+                    result = iconv.decode(body, 'utf8');
                 }
-                callback(true, body);
+
+                if (responseProcess != undefined) {
+                    result = responseProcess(response, result);
+                }
+                callback(true, result);
             }
         });
 }

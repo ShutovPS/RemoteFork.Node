@@ -9,8 +9,8 @@ exports.register = function(ip, port) {
         function (error, response, _) {
             console.log("statusCode:", response && response.statusCode);
 
-            if (error != undefined) {
-                console.error("error:", error);
+            if (error) {
+                console.error(error);
             } else {
                 console.log("registartion:", url);
             }

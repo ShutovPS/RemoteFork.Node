@@ -28,7 +28,9 @@
     "pug": "^2.0.0-beta6",
     "pug-bootstrap": "0.0.16",
     "request": "^2.88.0",
-    "serve-favicon": "^2.3.0"
+    "serve-favicon": "^2.3.0",
+    "iconv-lite": "^0.5.0",
+    "jschardet": "^2.1.0"
   },
   "main": "app.js",
   "engines": {
