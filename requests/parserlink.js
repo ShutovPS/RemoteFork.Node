@@ -45,7 +45,7 @@ function curlRequest(link, callback) {
     if (link.includes("--data")) {
         regex = /(?:--data\s")(.*?)(?=\s*")/gm;
 
-        const dataString = link.match(regex)[1];
+        const dataString = regex.exec(link)[1];
 
         postRequest(url, callback, dataString, headers, autoRedirect);
     } else if (verbose) {
@@ -59,6 +59,7 @@ function getOptions(method, link, heads, autoRedirect, data) {
     if (heads == undefined) {
         heads = [];
     }
+
     const options = {
         method: method,
         url: link,
