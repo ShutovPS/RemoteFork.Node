@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/dlna_directory";
+const KEY = "/dlna/directory";
 
 const httpStatus = require("http-status-codes");
 
@@ -11,7 +11,8 @@ const pretty = require('prettysize');
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEY = KEY;
+module.exports.KEYS = [KEY];
+
 module.exports.router = router;
 
 const settings = require("../settings.json");
@@ -27,8 +28,10 @@ const fileSize = (filePath) => {
     try {
         const stat = fs.statSync(filePath);
         return pretty(stat.size);
-    } catch (e) {
-        return pretty(0);
+    } catch (error) {
+        console.error(KEY, error);
+
+        return false;
     }
 }
 
@@ -39,7 +42,9 @@ const fileName = (filePath) => {
 const isDirectory = localPath => {
     try {
         return fs.statSync(localPath).isDirectory();
-    } catch (e) {
+    } catch (error) {
+        console.error(KEY, error);
+
         return false;
     }
 }
@@ -50,7 +55,9 @@ const getDirectories = localPath =>
 const isFile = localPath => {
     try {
         return fs.statSync(localPath).isFile();
-    } catch (e) {
+    } catch (error) {
+        console.error(KEY, error);
+
         return false;
     }
 }

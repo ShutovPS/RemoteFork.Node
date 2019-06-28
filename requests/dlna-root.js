@@ -1,6 +1,7 @@
 "use strict";
 
-module.exports.KEY = "/treeview";
+const KEY = "/root";
+const OLD_KEY = "/treeview";
 
 const httpStatus = require("http-status-codes");
 
@@ -9,6 +10,8 @@ const fs = require("fs");
 
 const express = require("express");
 const router = express.Router();
+
+module.exports.KEYS = [KEY, OLD_KEY];
 
 module.exports.router = router;
 
@@ -35,7 +38,7 @@ router.get("/",
 
 		if (settings.UserUrls && settings.UserUrls.length !== 0) {
 			const item = new DirectoryItem();
-			item.Title = "���������������� ������";
+			item.Title = "Пользовательские ссылки";
             item.Link = userUrls.createLink();
 
 			playList.Items.push(item);

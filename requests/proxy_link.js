@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/parserlink";
+const KEY = "/proxy/link";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");
@@ -11,7 +11,8 @@ const jschardet = require('jschardet');
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEY = KEY;
+module.exports.KEYS = [KEY, "/parserlink"];
+
 module.exports.router = router;
 
 function curlRequest(link, callback) {
@@ -24,7 +25,7 @@ function curlRequest(link, callback) {
 
     const url = regex.exec(link)[1];
 
-    console.log("url", url);
+    console.log(KEY, url);
 
     regex = /(?:-H\s")(.*?)(?:")/gm;
 
@@ -83,7 +84,7 @@ function sendRequest(options, callback, responseProcess) {
             if (!error) {
                 try {
                     let charSet = jschardet.detect(body);
-                    console.log("charSet", charSet);
+                    console.log(KEY, charSet);
     
                     result = iconv.decode(body, charSet.encoding);
                 } catch (e) {
@@ -118,7 +119,7 @@ function headRequest(link, callback, heads, autoRedirect) {
         return `${sh}\r\n${body}`;
     }
 
-    sendRequest(getOptions(!autoRedirect?"HEAD":"GET", link, heads, autoRedirect), callback, onResponse);
+    sendRequest(getOptions(!autoRedirect ? "HEAD" : "GET", link, heads, autoRedirect), callback, onResponse);
 }
 
 function getRequest(link, callback, heads, autoRedirect) {
@@ -164,7 +165,7 @@ function parselink(res, link) {
                     } else {
                         const pattern = requestStrings[1] + "(.*?)" + requestStrings[2];
 
-                        console.log("ParseLinkRequest: ", pattern);
+                        console.log(KEY, pattern);
 
                         const regex = new RegExp(pattern, "m");
                         if (regex.test(body)) {
@@ -184,7 +185,7 @@ function parselink(res, link) {
                 res.set({ 'content-type': 'text/html; charset=utf-8' });
                 res.end(result);
             } else {
-                console.error(error);
+                console.error(KEY, error);
                 
                 if (response && response.statusCode) {
                     res.statusCode = response.statusCode;
@@ -216,7 +217,7 @@ function onProcessRequest(req, res, url) {
     }
 
     const parseurl = (res, url) => {
-        console.log("parseurl:", url);
+        console.log(KEY, url);
 
         if (url && url.trim()) {
             parselink(res, url);
@@ -240,9 +241,13 @@ router.post("/",
 
         if (req.body != undefined && Object.keys(req.body).length > 0) {
             for (let key in req.body) {
-                console.log(key, req.body[key].trim());
+                const value = req.body[key].trim();
+
+                console.log(KEY, `${key}=${value}`);
+
                 url += key;
-                if (req.body[key].trim()) {
+
+                if (value) {
                     url += "=" + req.body[key];
                 }
             }

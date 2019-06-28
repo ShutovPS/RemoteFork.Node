@@ -1,11 +1,13 @@
 "use strict";
 
-module.exports.KEY = "/test";
+const KEY = "/test";
 
 const httpStatus = require("http-status-codes");
 
 const express = require("express");
 const router = express.Router();
+
+module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 

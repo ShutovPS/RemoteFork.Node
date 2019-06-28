@@ -1,6 +1,6 @@
 "use strict";
 
-module.exports.KEY = "/forkplayer";
+const KEY = "/forkplayer";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");
@@ -10,6 +10,8 @@ const fs = require("fs");
 
 const express = require("express");
 const router = express.Router();
+
+module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
@@ -37,7 +39,7 @@ router.get("/",
             if (!error && response.statusCode === httpStatus.OK && body.length > 1024) {
                 if (!fs.existsSync(scriptPath)) {
                     fs.mkdirSync(scriptPath, { recursive: true }, err => {
-                        console.log(err);
+                        console.error(KEY, err);
                     });
                 }
 
@@ -45,13 +47,13 @@ router.get("/",
                     body,
                     function(err) {
                         if (err) {
-                            console.log(err);
+                            console.error(KEY, err);
                         }
 
-                        console.log("New script was downloaded!");
+                        console.log(KEY, "New script was downloaded!");
                     });
             } else if (fs.existsSync(localPath)) {
-                console.log("Found old script");
+                console.log(KEY, "Found old script");
 
                 res.statusCode = httpStatus.OK;
                 fs.createReadStream(localPath).pipe(res);

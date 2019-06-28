@@ -1,11 +1,6 @@
 "use strict";
 
-module.exports.KEY = "/acestream/acestream";
-
-const configs = require("../configs.js");
-
-const FileItem = require("../playlist/file-item");
-const PlayList = require("../playlist/playlist");
+const KEY = "/acestream/acestream";
 
 const path = require("path");
 
@@ -15,7 +10,14 @@ const httpStatus = require("http-status-codes");
 const express = require("express");
 const router = express.Router();
 
+module.exports.KEYS = [KEY];
+
 module.exports.router = router;
+
+const configs = require("../configs.js");
+
+const FileItem = require("../playlist/file-item");
+const PlayList = require("../playlist/playlist");
 
 router.post("/",
     function (req, res) {

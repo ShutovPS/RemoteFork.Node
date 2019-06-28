@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/dlna_file";
+const KEY = "/dlna/file";
 
 const httpStatus = require("http-status-codes");
 
@@ -11,14 +11,15 @@ const fs = require("fs");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEY = KEY;
+module.exports.KEYS = [KEY];
+
 module.exports.router = router;
 
 const configs = require("../configs.js");
 
 function fetchFileSize(filePath) {
-    const stat = fs.statSync(filePath);
-    return stat.size;
+  const stat = fs.statSync(filePath);
+  return stat.size;
 }
 
 function generateIndexesWithGivenLength(headerRange, totalSize) {
@@ -26,7 +27,9 @@ function generateIndexesWithGivenLength(headerRange, totalSize) {
   const start = parseInt(parts[0], 10);
   const end = parts[1] ? parseInt(parts[1], 10) : totalSize - 1;
   const chunkSize = (end - start) + 1;
-   console.log(`RANGE: ${start} - ${end} = ${chunkSize}`);
+
+  console.log(KEY, `RANGE: ${start} - ${end} = ${chunkSize}`);
+
   return {
     start: start,
     end: end,
@@ -36,9 +39,9 @@ function generateIndexesWithGivenLength(headerRange, totalSize) {
 
 
 router.get("/", function (req, res) {
-    const localPath = decodeURIComponent(req.query.path);
+  const localPath = decodeURIComponent(req.query.path);
   
-    if (fs.existsSync(localPath)) {
+  if (fs.existsSync(localPath)) {
     const totalSize = fetchFileSize(localPath);
 
     const range = req.headers["range"];
@@ -55,12 +58,13 @@ router.get("/", function (req, res) {
       file.pipe(res);
 
     } else {
-      console.log(`No Request Header - Serving Whole Video With Total Size: ${totalSize}`);
+      console.log(KEY, `No Request Header - Serving Whole Video With Total Size: ${totalSize}`);
 
       res.writeHead(httpStatus.OK, {
         'Content-Length': totalSize,
         'Content-Type': mime.lookup(localPath)
       });
+
       fs.createReadStream(localPath).pipe(res);
     }
   } else {
@@ -69,8 +73,8 @@ router.get("/", function (req, res) {
 });
 
 function createLink(localPath) {
-    return `${configs.remoteForkAddress}${KEY}?path=${
-        encodeURIComponent(localPath)}`;
+  return `${configs.remoteForkAddress}${KEY}?path=${
+      encodeURIComponent(localPath)}`;
 }
 
 module.exports.createLink = createLink;

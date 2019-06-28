@@ -46,6 +46,7 @@
     <Compile Include="requests\user-urls.js" />
     <Content Include="configs.js" />
     <Content Include="libman.json" />
+    <Content Include="logger.js" />
     <Content Include="package.json" />
     <Content Include="plugins\nnmclub\plugin.js" />
     <Content Include="Procfile" />
@@ -55,10 +56,13 @@
     <Content Include="README.md" />
     <Content Include="requests\dlna-directory.js" />
     <Content Include="requests\dlna-file.js" />
-    <Content Include="requests\parserlink.js" />
     <Content Include="requests\plugin-icon.js" />
-    <Content Include="requests\proxym3u8.js" />
+    <Content Include="requests\proxy_file.js" />
+    <Content Include="requests\proxy_link.js" />
+    <Content Include="requests\proxy_m3u8.js" />
     <Content Include="routes\main.js" />
+    <Content Include="settings-default.json" />
+    <Content Include="settings-manager.js" />
     <Content Include="settings.json" />
     <Content Include="views\default.pug" />
     <Content Include="views\error.pug" />

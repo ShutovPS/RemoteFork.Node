@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/proxym3u8";
+const KEY = "/proxy/m3u8";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");
@@ -10,7 +10,8 @@ const mime = require("mime-type/with-db");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEY = KEY;
+module.exports.KEYS = [KEY, "/proxym3u8", /^\/proxym3u8.*$/];
+
 module.exports.router = router;
 
 const endbase64 = "endbase64";
@@ -20,7 +21,7 @@ const opt = "OPT:";
 const opend = "OPEND:";
 
 function processResponse(res, url) {
-    if (url == undefined) {
+    if (!url) {
         res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
         res.end();
 
@@ -60,7 +61,6 @@ function processResponse(res, url) {
             const matches = params.split("--");
 
             if (matches != undefined && matches.length !== 0) {
-
                 for (let i = 0; i < matches.length; i++) {
                     const k = matches[i];
                     const v = matches[++i];
@@ -74,7 +74,8 @@ function processResponse(res, url) {
 
         url = url.substring(0, url.indexOf(opt));
     }
-    console.log(url);
+
+    console.log(KEY, url);
 
     if (!headers.hasOwnProperty("ContentType")) {
         if (ts.trim()) {
@@ -98,7 +99,15 @@ function processResponse(res, url) {
         if (!error) {
             console.log(`response statusCode: ${response.statusCode}`);
         } else {
-            console.error(error);
+            console.error(KEY, error);
+
+            res.error = error;
+            if (response) {
+                res.statusCode = response.statusCode;
+            } else {
+                res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
+            }
+            res.end(body);
         }
     })
     .on("data", function(data) {

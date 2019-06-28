@@ -1,9 +1,10 @@
 "use strict";
 
-const KEY = "/plugin_icon";
+const KEY = "/plugins/icon";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");
+
 const mime = require("mime-type/with-db");
 
 const fs = require("fs");
@@ -12,7 +13,8 @@ const path = require("path");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEY = KEY;
+module.exports.KEYS = [KEY];
+
 module.exports.router = router;
 
 const iconsPath = "public/temp/plugins/";
@@ -39,43 +41,28 @@ router.get("/",
                 }
 
                 const saveFile = (data) => {
-                    if (data.length > 0) {
-                        if (!fs.existsSync(iconsPath)) {
-                            fs.mkdirSync(iconsPath,
-                                { recursive: true },
-                                (err) => {
-                                    if (err) throw err;
+                    try {
+                        if (data.length > 0) {
+                            if (!fs.existsSync(iconsPath)) {
+                                fs.mkdirSync(iconsPath,
+                                    { recursive: true },
+                                    (errorMkdir) => {
+                                        if (errorMkdir) {
+                                            throw errorMkdir;
+                                        }
+                                    });
+                            }
+
+                            fs.writeFile(filePath,
+                                data,
+                                function(errorWrite) {
+                                    if (errorWrite) {
+                                        console.error(KEY, errorWrite);
+                                    }
                                 });
                         }
-
-                        console.log("data", data.length);
-
-                        console.log("filePath", filePath);
-
-                        fs.writeFile(filePath,
-                            data,
-                            function(err) {
-                                if (err) {
-                                    console.log(err);
-                                }
-                            });
-                    }
-                }
-
-                function callback(error, response, body) {
-                    console.log("response", response);
-                    if (error) {
-                        console.error(error);
-
-                        res.error = error;
-                        if (response) {
-                            res.statusCode = response.statusCode;
-                            res.setHeader("Content-Type", response.headers && response.headers["Content-Type"]);
-                        } else {
-                            res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
-                        }
-
-                        res.end(body);
+                    } catch(error) {
+                        console.error(KEY, error);
                     }
                 }
 
@@ -86,7 +73,7 @@ router.get("/",
 
                 request(options, function(error, response, body) {
                     if (error) {
-                        console.error(error);
+                        console.error(KEY, error);
 
                         res.statusCode = httpStatus.INTERNAL_SERVER_ERROR;
                         res.error = error;
