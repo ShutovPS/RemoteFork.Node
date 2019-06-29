@@ -4,9 +4,7 @@ const KEY = "/directory";
 
 const httpStatus = require("http-status-codes");
 
-const path = require("path");
 const fs = require("fs");
-const pretty = require("prettysize");
 
 const express = require("express");
 const router = express.Router();
