@@ -1,17 +1,17 @@
 "use strict";
 
-const KEY = "/proxy/link";
+const KEY = "/parserlink";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");
 
-const iconv = require('iconv-lite');
-const jschardet = require('jschardet');
+const iconv = require("iconv-lite");
+const jschardet = require("jschardet");
 
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY, "/parserlink"];
+module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
@@ -209,13 +209,7 @@ function parselink(res, link) {
     }
 }
 
-function onProcessRequest(req, res, url) {
-    if (req.query.link) {
-        url = decodeURIComponent(req.query.link);
-    } else {
-        url = decodeURIComponent(url).substring(2);
-    }
-
+function onProcessRequest(res, url) {
     const parseurl = (res, url) => {
         console.log(KEY, url);
 
@@ -227,12 +221,14 @@ function onProcessRequest(req, res, url) {
         }
     }
 
+    url = decodeURIComponent(url.substring(2));
+
     parseurl(res, url);
 }
 
 router.get("/",
     function(req, res) {
-        onProcessRequest(req, res, req.url);
+        onProcessRequest(res, req.url);
     });
 
 router.post("/",
@@ -255,5 +251,5 @@ router.post("/",
             url = req.url;
         }
 
-        onProcessRequest(req, res, url);
+        onProcessRequest(res, url);
     });

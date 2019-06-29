@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/proxy/m3u8";
+const KEY = "/proxym3u8";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");
@@ -10,7 +10,7 @@ const mime = require("mime-type/with-db");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY, "/proxym3u8", /^\/proxym3u8.*$/];
+module.exports.KEYS = [KEY, /^\/proxym3u8.*$/];
 
 module.exports.router = router;
 
@@ -31,6 +31,10 @@ function processResponse(res, url) {
     const headers = [];
 
     let ts = "";
+    
+    if (url.startsWith("?")) {
+        url = url.substring(1);
+    }
 
     if (url.startsWith("B")) {
         url = url.substring(1);
@@ -120,11 +124,7 @@ function processResponse(res, url) {
 
 router.get("/",
     function (req, res) {
-        let url = req.query.link;
-
-        if (url == undefined) {
-            url = req.baseUrl.substring(proxym3u8.length + 1);
-        }
+        const url = req.originalUrl.substring(proxym3u8.length + 1);
 
         processResponse(res, url);
     });

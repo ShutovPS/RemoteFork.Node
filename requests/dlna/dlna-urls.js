@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/user_urls";
+const KEY = "/urls";
 
 const httpStatus = require("http-status-codes");
 
@@ -11,11 +11,13 @@ module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
-const settings = require("../settings.json");
-const configs = require("../configs.js");
+const dlna = require("../dlna");
 
-const FileItem = require("../playlist/file-item");
-const PlayList = require("../playlist/playlist");
+const settings = require("../../settings.json");
+const configs = require("../../configs.js");
+
+const FileItem = require("../../playlist/file-item");
+const PlayList = require("../../playlist/playlist");
 
 router.get("/",
     function (req, res) {
@@ -44,7 +46,7 @@ router.get("/",
     });
 
 function createLink() {
-    return `${configs.remoteForkAddress}${KEY}`;
+    return `${configs.remoteForkAddress}${dlna.KEY}${KEY}`;
 }
 
 module.exports.createLink = createLink;

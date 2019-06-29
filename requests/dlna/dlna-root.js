@@ -1,7 +1,6 @@
 "use strict";
 
 const KEY = "/root";
-const OLD_KEY = "/treeview";
 
 const httpStatus = require("http-status-codes");
 
@@ -11,18 +10,18 @@ const fs = require("fs");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY, OLD_KEY];
+module.exports.KEYS = [KEY, "/"];
 
 module.exports.router = router;
 
-const settings = require("../settings.json");
+const settings = require("../../settings.json");
 
-const userUrls = require("./user-urls");
+const userUrls = require("./dlna-urls");
 const dlnaDirectory = require("./dlna-directory");
 
-const DirectoryItem = require("../playlist/directory-item");
-const PlayList = require("../playlist/playlist");
-const RootPlayList = require("../playlist/root-playlist");
+const DirectoryItem = require("../../playlist/directory-item");
+const PlayList = require("../../playlist/playlist");
+const RootPlayList = require("../../playlist/root-playlist");
 
 router.get("/",
     function (req, res) {
