@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/plugins/icon";
+const KEY = "/icon";
 
 const request = require("request");
 const httpStatus = require("http-status-codes");

@@ -15,6 +15,7 @@ settingsManager.checkSettings();
 
 const morgan = require("morgan");
 const logger = require("./logger.js");
+const analytics = require("./analytics.js");
 
 const settings = require("./settings.json");
 
@@ -47,6 +48,9 @@ app.use(cookieParser());
 
 app.use(function (req, res, next) {
     res.setHeader("Access-Control-Allow-Origin", "*");
+
+    analytics.trackEvent(req.method, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
+
     next();
 });
 
@@ -90,31 +94,34 @@ app.use(function(req, res, next) {
 
 // error handlers
 
+app.use(function(err, req, res, next) {
+    res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
+
+    const options = {
+        title: "Error",
+        message: err.message,
+        
+        error: null
+    };
+
 // development error handler
 // will print stacktrace
-if (app.get("env") === "development") {
-    app.use(function(err, req, res, next) {
-        logger.error(err);
-        res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
-        res.render("error",
-            {
-                title: "Error",
-                message: err.message,
-                error: err
-            });
-    });
-}
+    if (app.get("env") === "development") {
+        options.error = err;
+    }
 
-// production error handler
-// no stacktraces leaked to user
+    res.render("error", options);
+
+    next(err);
+});
+
+
 app.use(function(err, req, res, next) {
-	res.status(err.status || httpStatus.INTERNAL_SERVER_ERROR);
-	res.render("error",
-		{
-			title: "Error",
-			message: err.message,
-			error: {}
-		});
+    logger.error(err);
+
+    analytics.trackEvent(err.message, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
+
+    next(err);
 });
 
 const ip = settings.Environment.IpAddress;

@@ -1,13 +1,10 @@
 {
   "Environment": {
+    "UseAutoAddress": true,
     "IpAddress": "0.0.0.0",
     "Port": 8027,
-    "UseAutoAddress": true,
-    "ListenLocalhost": true,
     "UserAgent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
-    "LogLevel": 5,
-    "DeveloperMode": false,
-    "CheckUpdate": true
+    "GaTrackingId": "UA-119885832-1"
   },
   "Proxy": {
     "Enable": false,
@@ -26,7 +23,8 @@
   "Dlna": {
     "Enable": false,
     "Directories": [],
-    "FileExtensions": []
+    "FileExtensions": [],
+    "StartPageModernStyle": false
   },
   "AceStream": {
     "Enable": false,
@@ -34,6 +32,5 @@
     "IpAddress": "0.0.0.0",
     "Port": 6878
   },
-  "UserUrls": [],
-  "StartPageModernStyle": false
+  "UserUrls": []
 }

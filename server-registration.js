@@ -6,7 +6,7 @@ exports.register = function(ip, port) {
     const url = `http://getlist2.obovse.ru/remote/index.php?v=1&do=list&localip=${ip}:${port}&proxy=false`;
 
     request(url,
-        function (error, response, _) {
+        function (error, response, body) {
             console.log("statusCode:", response && response.statusCode);
 
             if (error) {

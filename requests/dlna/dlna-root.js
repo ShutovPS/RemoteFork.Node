@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/root";
+const KEY = "/";
 
 const httpStatus = require("http-status-codes");
 
@@ -10,7 +10,7 @@ const fs = require("fs");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY, "/"];
+module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
@@ -31,7 +31,7 @@ router.get("/",
 
 		let playList = new PlayList();
 
-		if (settings.StartPageModernStyle) {
+		if (settings.Dlna.StartPageModernStyle) {
 			playList = new RootPlayList();
 		}
 
