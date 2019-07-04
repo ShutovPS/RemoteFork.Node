@@ -1,4 +1,4 @@
-﻿"use strict";
+"use strict";
 const fs = require("fs");
 const path = require("path");
 
@@ -40,6 +40,9 @@ app.set("view engine", "pug");
 app.use(favicon(path.join(__dirname, "public", "images", "favicon.ico")));
 
 app.use(morgan("combined", { stream: logger.stream }));
+
+process.stdout.write = logger.writer.info;
+process.stderr.write = logger.writer.error;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

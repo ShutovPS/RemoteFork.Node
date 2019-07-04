@@ -43,4 +43,13 @@ logger.stream = {
     }
 };
 
+logger.writer = {
+    info: function(message, encoding){
+        logger.info(message);
+    },
+    error: function(message, encoding){
+        logger.error(message);
+    }
+};
+
 module.exports = logger;
