@@ -2,29 +2,22 @@
 
 const KEY = "/urls";
 
-const httpStatus = require("http-status-codes");
-
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY];
+module.exports.KEY = KEY;
 
 module.exports.router = router;
 
-const dlna = require("../dlna");
-
-const settings = require("../../settings.json");
-const configs = require("../../configs.js");
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
+const configs = require("../../configs");
 
 const FileItem = require("../../playlist/file-item");
 const PlayList = require("../../playlist/playlist");
 
 router.get("/",
     function (req, res) {
-        const headers = {
-            "Content-Type": "text/json"
-        };
-
         const playList = new PlayList();
 
         const baseItem = new FileItem();
@@ -39,14 +32,11 @@ router.get("/",
 			});
 		}
 
-        const json = JSON.stringify(playList);
-
-        res.writeHead(httpStatus.OK, headers);
-		res.end(json);
+        playList.sendResponse(res);
     });
 
-function createLink() {
-    return `${configs.remoteForkAddress}${dlna.KEY}${KEY}`;
+function createLink(baseUrl) {
+    return `${configs.remoteForkAddress}${baseUrl}${KEY}`;
 }
 
 module.exports.createLink = createLink;

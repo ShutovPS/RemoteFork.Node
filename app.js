@@ -2,6 +2,8 @@
 const fs = require("fs");
 const path = require("path");
 
+global.__rootname = path.resolve(__dirname);
+
 const httpStatus = require("http-status-codes");
 
 const express = require("express");
@@ -9,21 +11,31 @@ const favicon = require("serve-favicon");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
-const settingsManager = require("./settings-manager.js");
+const settingsManager = require("./settings-manager");
 
 settingsManager.checkSettings();
 
 const morgan = require("morgan");
-const logger = require("./logger.js");
-const analytics = require("./analytics.js");
+const logger = require("./logger");
+const analytics = require("./analytics");
 
-const settings = require("./settings.json");
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
 
 const main = require("./routes/main");
 
 const registration = require("./server-registration");
 
 const app = express();
+
+app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
+    analytics.trackEvent(req.method, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
+
+    next();
+});
+
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -48,24 +60,17 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
-
-app.use(function (req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-
-    analytics.trackEvent(req.method, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
-
-    next();
-});
-
 app.use("/", main);
 app.use("/main", main);
 
 const registerRequest = (path) => {
     const module = require(path);
 
-    module.KEYS.forEach(key => {
-        app.use(key, module.router);
-    });
+    if (module.KEYS != undefined) {
+        module.KEYS.forEach(key => {
+            app.use(key, module.router);
+        });
+    }
 }
 
 const registerRequests = (directory) => {
@@ -86,7 +91,6 @@ const registerRequests = (directory) => {
 }
 
 registerRequests("./requests/");
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

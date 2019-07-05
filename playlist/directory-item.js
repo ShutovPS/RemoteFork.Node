@@ -3,10 +3,9 @@ const IItem = require("./item");
 module.exports = class DirectoryItem extends IItem {
   constructor(item) {
     super(item);
+    
     if (item) {
-      if (item.Link) {
-        this.Link = item.Link;
-      }
+      this.Link = item.Link;
     }
   }
 

@@ -14,7 +14,7 @@ module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
-const configs = require("../configs.js");
+const configs = require("../configs");
 
 const FileItem = require("../playlist/file-item");
 const PlayList = require("../playlist/playlist");

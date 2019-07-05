@@ -17,7 +17,7 @@ module.exports.router = router;
 
 const scriptUrl = "http://getlist5.obovse.ru/jsapp/app.js.php?run=js";
 
-const scriptPath = "../public/temp/javascripts";
+const scriptPath = "/public/temp/javascripts";
 const scriptFile = "forkplayer.js";
 
 router.get("/",
@@ -34,7 +34,7 @@ router.get("/",
         };
 
         function callback(error, response, body) {
-            let localPath = path.join(__dirname, scriptPath);
+            let localPath = path.join(global.__rootname, scriptPath);
 
             if (!error && response.statusCode === httpStatus.OK && body.length > 1024) {
                 if (!fs.existsSync(localPath)) {

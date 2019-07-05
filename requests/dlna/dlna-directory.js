@@ -9,14 +9,15 @@ const fs = require("fs");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY];
+module.exports.KEY = KEY;
 
 module.exports.router = router;
 
 const dlna = require("../dlna");
 
-const settings = require("../../settings.json");
-const configs = require("../../configs.js");
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
+const configs = require("../../configs");
 
 const dlnaFile = require("./dlna-file");
 
@@ -24,25 +25,25 @@ const DirectoryItem = require("../../playlist/directory-item");
 const FileItem = require("../../playlist/file-item");
 const PlayList = require("../../playlist/playlist");
 
-function processRequest(res, localPath) {
-    const headers = {
-        "Content-Type": "text/json"
-    };
-
+function processRequest(baseUrl, res, localPath) {
     const playList = new PlayList();
 
-    const dirs = dlna.getDirectories(localPath);
+    try {
+        const dirs = dlna.getDirectories(localPath);
 
-    if (dirs != undefined) {
-        dirs.forEach(function (dir) {
-            const item = new DirectoryItem();
+        if (dirs != undefined) {
+            dirs.forEach(function (dir) {
+                const item = new DirectoryItem();
 
-            item.Title = dlna.fileName(dir);
-            item.Description = dir;
-            item.Link = createLink(dir);
+                item.Title = dlna.fileName(dir);
+                item.Description = dir;
+                item.Link = createLink(baseUrl, dir);
 
-            playList.Items.push(item);
-        });
+                playList.Items.push(item);
+            });
+        }
+    } catch(e) {
+        console.error(KEY, e);
     }
 
     const files = dlna.getFiles(localPath);
@@ -65,32 +66,35 @@ function processRequest(res, localPath) {
 
                 item.Title = `${dlna.fileName(file)} (${dlna.fileSize(file)})`;
                 item.Description = file;
-                item.Link = dlnaFile.createLink(file);
+                item.Link = dlnaFile.createLink(baseUrl, file);
 
                 playList.Items.push(item);
             }
         });
     }
 
-    const json = JSON.stringify(playList);
-
-    res.writeHead(httpStatus.OK, headers);
-    res.end(json);
+    playList.sendResponse(res);
 }
 
 router.get("/", function (req, res) {
     const localPath = decodeURIComponent(req.query.path);
 
-    if (localPath && fs.existsSync(localPath) && dlna.isDirectory(localPath)) {
-        processRequest(res, localPath);
+    if (settings.Dlna.Enable && localPath && fs.existsSync(localPath) && dlna.isDirectory(localPath)) {
+        let baseUrl = req.baseUrl;
+
+        if (baseUrl.endsWith(KEY)) {
+            baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf(KEY));
+        }
+
+        processRequest(baseUrl, res, localPath);
     } else {
         res.status(httpStatus.INTERNAL_SERVER_ERROR);
         res.end(localPath);
     }
 });
 
-function createLink(localPath) {
-    return `${configs.remoteForkAddress}${dlna.KEY}${KEY}?path=${
+function createLink(baseUrl, localPath) {
+    return `${configs.remoteForkAddress}${baseUrl}${KEY}?path=${
         encodeURIComponent(localPath)}`;
 }
 

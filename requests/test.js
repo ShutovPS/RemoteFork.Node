@@ -11,8 +11,10 @@ module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
-const pjson = require("../package.json");
-const settings = require("../settings.json");
+const SelfReloadJSON = require('self-reload-json');
+
+const pjson = new SelfReloadJSON("package.json");
+const settings = new SelfReloadJSON("settings.json");
 
 router.get("/",
     function (req, res) {

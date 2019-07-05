@@ -11,13 +11,16 @@ const fs = require("fs");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY];
+module.exports.KEY = KEY
 
 module.exports.router = router;
 
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
+
 const dlna = require("../dlna");
 
-const configs = require("../../configs.js");
+const configs = require("../../configs");
 
 function generateIndexesWithGivenLength(headerRange, totalSize) {
   const parts = headerRange.replace(/bytes=/, "").split("-");
@@ -65,7 +68,7 @@ function processRequest(req, res, localPath) {
 router.get("/", function (req, res) {
   const localPath = decodeURIComponent(req.query.path);
   
-  if (localPath && fs.existsSync(localPath) && dlna.isFile(localPath)) {
+  if (settings.Dlna.Enable && localPath && fs.existsSync(localPath) && dlna.isFile(localPath)) {
     processRequest(req, res, localPath);
   } else {
     res.status(httpStatus.INTERNAL_SERVER_ERROR);
@@ -73,9 +76,9 @@ router.get("/", function (req, res) {
   }
 });
 
-function createLink(localPath) {
-  return `${configs.remoteForkAddress}${dlna.KEY}${KEY}?path=${
-      encodeURIComponent(localPath)}`;
+function createLink(baseUrl, localPath) {
+  return `${configs.remoteForkAddress}${baseUrl}${KEY}?path=${
+      encodeURIComponent(encodeURIComponent(localPath))}`;
 }
 
 module.exports.createLink = createLink;

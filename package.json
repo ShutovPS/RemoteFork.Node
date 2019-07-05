@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node app"
   },
-  "description": "RemoteFork",
+  "description": "RemoteFork.Node",
   "author": {
     "name": "fd_crash"
   },
@@ -29,8 +29,12 @@
     "pug": "^2.0.0-beta6",
     "pug-bootstrap": "0.0.16",
     "request": "^2.88.0",
+    "request-promise-native": "^1.0.7",
+    "self-reload-json": "^0.4.0",
     "serve-favicon": "^2.3.0",
+    "string-builder": "^0.1.6",
     "uniqid": "^5.0.3",
+    "unzipper": "^0.10.1",
     "winston": "^3.2.1",
     "winston-daily-rotate-file": "^3.9.0"
   },

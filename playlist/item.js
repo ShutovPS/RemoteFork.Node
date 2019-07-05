@@ -1,15 +1,9 @@
 module.exports = class Item {
   constructor(item) {
     if (item) {
-      if (item.Title) {
-        this.Title = item.Title;
-      }
-      if (item.Description) {
-        this.Description = item.Description;
-      }
-      if (item.ImageLink) {
-        this.ImageLink = item.ImageLink;
-      }
+      this.Title = item.Title;
+      this.Description = item.Description;
+      this.Image = item.Image;
     }
   }
 
@@ -27,10 +21,30 @@ module.exports = class Item {
     return this.description;
   }
 
+  set Image(value) {
+    this.logo_30x30 = value;
+  }
+  get Image() {
+    return this.logo_30x30;
+  }
   set ImageLink(value) {
     this.logo_30x30 = value;
   }
   get ImageLink() {
     return this.logo_30x30;
+  }
+
+	set Menu(value) {
+		this.menu = value;
+	}
+	get Menu() {
+		return this.menu;
+	}
+
+  set Yellow(value) {
+    this.yellow = value;
+  }
+  get Yellow() {
+    return this.yellow;
   }
 }

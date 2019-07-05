@@ -28,11 +28,7 @@ router.get("/",
                 headers: headers
             }
 
-            const data = req.query.data;
-
-            if (data) {
-                proxy.parseResposeData(data, options);
-            }
+            proxy.parseResposeData(req.query.headers, req.query.data, options);
             
             if (req.query.followRedirect === "false") {
                 options.followRedirect = false;
@@ -49,7 +45,7 @@ router.get("/",
                 .pipe(res);
         } else {
             res.status(httpStatus.INTERNAL_SERVER_ERROR);
-            res.end(localPath);
+            res.end(url);
         }
     });
 

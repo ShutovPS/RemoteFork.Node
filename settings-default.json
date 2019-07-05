@@ -16,7 +16,7 @@
     "Type": 0
   },
   "Plugins": {
-    "Enable": false,
+    "Enable": true,
     "EnablePlugins": [],
     "ShownIcons": false
   },

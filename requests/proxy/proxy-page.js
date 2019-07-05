@@ -61,11 +61,7 @@ function onProcessRequest(req, res, url) {
             encoding: null
         }
 
-        const data = req.query.data;
-
-        if (data) {
-            proxy.parseResposeData(data, options);
-        }
+        proxy.parseResposeData(req.query.headers, req.query.data, options);
         
         if (req.query.followRedirect === "false") {
             options.followRedirect = false;
@@ -79,7 +75,7 @@ function onProcessRequest(req, res, url) {
 
         sendRequest(options, function(error, response, body) {
             if (error) {
-                console.error(error);
+                console.error(KEY, error);
             }
 
             if (req.query.returnHeaders === "true") {

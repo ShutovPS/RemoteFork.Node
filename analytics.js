@@ -4,7 +4,8 @@ const request = require("request");
 
 const uniqid = require('uniqid');
 
-const settings = require("./settings.json");
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
 
 // The following environment variable is set by app.yaml when running on App
 // Engine, but will need to be set manually when running locally. See README.md.

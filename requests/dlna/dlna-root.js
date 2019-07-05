@@ -2,64 +2,82 @@
 
 const KEY = "/";
 
-const httpStatus = require("http-status-codes");
-
-const path = require("path");
 const fs = require("fs");
 
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEYS = [KEY];
+module.exports.KEY = KEY;
 
 module.exports.router = router;
 
-const settings = require("../../settings.json");
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
 
+const dlna = require("../dlna");
 const userUrls = require("./dlna-urls");
 const dlnaDirectory = require("./dlna-directory");
+const plugins = require("../plugins");
 
 const DirectoryItem = require("../../playlist/directory-item");
 const PlayList = require("../../playlist/playlist");
 const RootPlayList = require("../../playlist/root-playlist");
 
-router.get("/",
-    function (req, res) {
-	    const headers = {
-            "Content-Type": "text/json"
-        };
+router.get("/", function (req, res) {
+	let baseUrl = req.baseUrl;
 
-		let playList = new PlayList();
+	if (baseUrl.endsWith(KEY)) {
+		baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf(KEY));
+	}
 
-		if (settings.Dlna.StartPageModernStyle) {
-			playList = new RootPlayList();
+	let playList = new PlayList();
+
+	if (settings.Dlna.StartPageModernStyle) {
+		playList = new RootPlayList();
+	}
+
+	const baseItem = new DirectoryItem();
+
+	if (settings.UserUrls && settings.UserUrls.length !== 0) {
+		const item = new DirectoryItem(baseItem);
+		item.Title = "Пользовательские ссылки";
+		item.Link = userUrls.createLink(baseUrl);
+
+		playList.Items.push(item);
+	}
+
+	if (settings.Dlna.Enable) {
+		if (settings.Dlna.Directories && settings.Dlna.Directories.length !== 0) {
+			settings.Dlna.Directories.forEach(function (element) {
+				if (fs.existsSync(element)) {
+					const item = new DirectoryItem(baseItem);
+					item.Title = dlna.fileName(element);
+					item.Description = element;
+					item.Link = dlnaDirectory.createLink(baseUrl, element);
+
+					playList.Items.push(item);
+				}
+			});
 		}
+	}
 
-		if (settings.UserUrls && settings.UserUrls.length !== 0) {
-			const item = new DirectoryItem();
-			item.Title = "Пользовательские ссылки";
-            item.Link = userUrls.createLink();
+	if (settings.Plugins.Enable) {
+		if (plugins.Plugins && plugins.Plugins.length !== 0) {
+			for (let key in plugins.Plugins) {
+				const plugin = plugins.Plugins[key];
 
-			playList.Items.push(item);
-		}
+				const item = new DirectoryItem(baseItem);
 
-		if (settings.Dlna.Enable) {
-            if (settings.Dlna.Directories && settings.Dlna.Directories.length !== 0) {
-				settings.Dlna.Directories.forEach(function(element) {
-					if (fs.existsSync(element)) {
-						const item = new DirectoryItem();
-                        item.Title = element.split(path.sep).pop();
-                        item.Description = element;
-                        item.Link = dlnaDirectory.createLink(element);
+				item.Title = plugin.title;
+				item.Description = plugin.description;
+				item.Image = plugin.icon;
 
-						playList.Items.push(item);
-					}
-				});
+				item.Link = plugins.createLink(plugin.key);
+
+				playList.Items.push(item);
 			}
 		}
+	}
 
-        const json = JSON.stringify(playList);
-
-        res.writeHead(httpStatus.OK, headers);
-		res.end(json);
-	});
+	playList.sendResponse(res);
+});

@@ -1,6 +1,6 @@
 "use strict";
 
-const KEY = "/dlna";
+const KEY = "/treeview";
 
 const fs = require("fs");
 const path = require("path");
@@ -10,17 +10,18 @@ const pretty = require("prettysize");
 const express = require("express");
 const router = express.Router();
 
-module.exports.KEY = KEY;
-module.exports.KEYS = [KEY, "/treeview"];
+module.exports.KEYS = [KEY];
 
 module.exports.router = router;
+
+const requestsPath = "./dlna/";
 
 const registerRequest = (path) => {
     const module = require(path);
 
-    module.KEYS.forEach(key => {
-        router.use(key, module.router);
-    });
+    if (module.KEY) {
+        router.use(module.KEY, module.router);
+    }
 }
 
 const registerRequests = (directory) => {
@@ -40,15 +41,13 @@ const registerRequests = (directory) => {
     });
 }
 
-registerRequests("./dlna/");
-
 function fetchFileSize(filePath) {
-  try {
-    const stat = fs.statSync(filePath);
-    return stat.size;
-} catch (error) {
-    return 0;
-}
+    try {
+        const stat = fs.statSync(filePath);
+        return stat.size;
+    } catch (error) {
+        return 0;
+    }
 }
 module.exports.fetchFileSize = fetchFileSize;
 
@@ -87,3 +86,5 @@ module.exports.isFile = isFile;
 const getFiles = localPath =>
     fs.readdirSync(localPath).map(name => path.join(localPath, name)).filter(isFile);
 module.exports.getFiles = getFiles;
+
+registerRequests(requestsPath);

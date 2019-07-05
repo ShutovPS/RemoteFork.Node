@@ -12,12 +12,16 @@ module.exports.KEYS = [KEY];
 
 module.exports.router = router;
 
+const requestsPath = "./proxy/";
+
 const registerRequest = (path) => {
     const module = require(path);
 
-    module.KEYS.forEach(key => {
-        router.use(key, module.router);
-    });
+    if (module.KEYS != undefined) {
+        module.KEYS.forEach(key => {
+            router.use(key, module.router);
+        });
+    }
 }
 
 const registerRequests = (directory) => {
@@ -36,8 +40,6 @@ const registerRequests = (directory) => {
         }
     });
 }
-
-registerRequests("./proxy/");
 
 function cleanHeaders(headers, excludes) {
     return [headers].reduce(function(r, o) {
@@ -70,20 +72,16 @@ function concatHeaders(headers, advHeaders) {
 }
 module.exports.concatHeaders = concatHeaders;
 
-function parseResposeData(data, options) {
-    //data = decodeURIComponent(data);
+function parseResposeData(headers, data, options) {
+    if (headers) {
+        options.headers = concatHeaders(options.headers, headers);
+    }
 
     if (data) {
-        data = JSON.parse(data);
-
-        if (data.headers) {
-            options.headers = concatHeaders(options.headers, data.headers);
-        }
-
-        if (data.postdata) {
-            options.method = "POST";
-            options.form = data.postdata;
-        }
+        options.method = "POST";
+        options.form = data;
     }
 }
 module.exports.parseResposeData = parseResposeData;
+
+registerRequests(requestsPath);

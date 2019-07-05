@@ -1,8 +1,13 @@
 "use strict";
 
-const  settings = require("./settings.json");
+const SelfReloadJSON = require('self-reload-json');
+const settings = new SelfReloadJSON("settings.json");
 
 const remoteForkAddress = () => {
+    if (process.env.SERVER_ADDRESS && process.env.SERVER_PORT) {
+        return `http://${process.env.SERVER_ADDRESS}:${process.env.SERVER_PORT}`;
+    }
+
     if (settings.Environment.UseAutoAddress) {
         return "http://LOCAL_IP:LOCAL_PORT";
     } else {

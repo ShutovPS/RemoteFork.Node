@@ -1,8 +1,8 @@
 const PlayList = require("./playlist");
 
 module.exports = class RootPlayList extends PlayList {
-  constructor(items) {
-      super(items);
+  constructor(playList) {
+      super(playList);
 
       this.typeList = "start";
   }

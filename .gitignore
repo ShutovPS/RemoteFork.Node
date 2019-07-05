@@ -74,4 +74,5 @@ bin/
 
 \.idea/
 
-settings\.json
+/settings\.json
+/plugins
