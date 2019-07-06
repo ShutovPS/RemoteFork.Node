@@ -31,6 +31,7 @@ router.get("/", function (req, res) {
 	}
 
 	let playList = new PlayList();
+	playList.Icon = "https://getsapp.ru/Img/tizen/fork_logo.png";
 
 	if (settings.Dlna.StartPageModernStyle) {
 		playList = new RootPlayList();
