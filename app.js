@@ -28,15 +28,6 @@ const registration = require("./server-registration");
 
 const app = express();
 
-app.use(function (req, res, next) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-
-    analytics.trackEvent(req.method, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
-
-    next();
-});
-
-
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/assets", [
@@ -62,6 +53,14 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use("/", main);
 app.use("/main", main);
+
+app.use(function (req, res, next) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+
+    analytics.trackEvent(req.method, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
+
+    next();
+});
 
 const registerRequest = (path) => {
     const module = require(path);
@@ -128,7 +127,7 @@ app.use(function(err, req, res, next) {
 
     analytics.trackEvent(err.message, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
 
-    next(err);
+    //next(err);
 });
 
 const ip = settings.Environment.IpAddress;

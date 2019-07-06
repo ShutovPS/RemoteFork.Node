@@ -36,7 +36,7 @@ const registerRequests = (directory) => {
         try {
             registerRequest(path.join(directory, file));
         } catch(error) {
-            console.error(error);
+            console.error(KEY, error);
         }
     });
 }
