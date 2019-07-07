@@ -1,7 +1,7 @@
 {
   "Environment": {
     "UseAutoAddress": true,
-    "IpAddress": "0.0.0.0",
+    "IpAddress": "127.0.0.1",
     "Port": 8027,
     "UserAgent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.36",
     "GaTrackingId": "UA-119885832-1"
@@ -29,8 +29,13 @@
   "AceStream": {
     "Enable": false,
     "UseAutoAddress": true,
-    "IpAddress": "0.0.0.0",
+    "IpAddress": "127.0.0.1",
     "Port": 6878
   },
-  "UserUrls": []
+  "UserUrls": [],
+  "DNS": {
+    "Enable": false,
+    "MainHost": "remotefork.local",
+    "Hosts": ["lg.rutv.ru", "tv.rutv.ru", "smartservic.tvigle.ru", "smartservice.tvigle.ru", "lge2.tvigle.ru", "lg.v4.tvigle.ru", "nettv.tvigle.ru", "movie.tizen.ivi.ru", "lg.ivi.ru", "tv.deezer.com"]
+  }
 }

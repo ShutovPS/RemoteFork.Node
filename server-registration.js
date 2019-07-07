@@ -7,8 +7,6 @@ exports.register = function(ip, port) {
 
     request(url,
         function (error, response, body) {
-            console.log("statusCode:", response && response.statusCode);
-
             if (error) {
                 console.error(error);
             } else {

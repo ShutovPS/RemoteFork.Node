@@ -1,10 +1,15 @@
 "use strict";
 
 const fs = require("fs");
+const path = require("path");
+
 const settingsPath = "./settings.json";
 const defaultSettingsPath ="./settings-default.json";
 
-function checkSettings() {
+function checkSettings(app, dirname) {
+    global.__rootname = path.resolve(dirname);
+    global.env = app.get("env");
+
     if (fs.existsSync(settingsPath)) {
         try {
             let settings = require(settingsPath);
