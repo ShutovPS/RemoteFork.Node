@@ -29,6 +29,7 @@
   "AceStream": {
     "Enable": false,
     "UseAutoAddress": true,
+		"UseDifferentAddress": false,
     "IpAddress": "127.0.0.1",
     "Port": 6878
   },

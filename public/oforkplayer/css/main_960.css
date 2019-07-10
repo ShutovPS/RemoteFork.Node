@@ -1,0 +1,379 @@
+body 
+{
+	overflow:hidden;
+	font-family: LG Display;
+	font-size:20px;
+	color:#EEEEEE;
+	margin:0px;
+}
+#loading
+{
+	position: absolute;	
+	top:188px;
+	left:436px;
+}
+#popUp{
+	position: absolute;	
+	top:458px;
+	left:721px;
+	text-align:left;	
+	width:218px;
+	overflow:hidden;
+	font-size:13px;
+	color:#767676;
+	background-color: #FCFCFE;
+	padding:6px;
+	border-radius:6px;
+	border:1px solid #767676;
+	z-index:2;
+}
+.cbutton{
+	padding:3px;
+	border-radius:4px;
+	border:2px solid white;
+	background-color:gray;
+}
+.pn{
+	float:left;
+	margin-left:0px;
+	overflow:hidden;
+	width:35px;
+	text-align:center;
+}
+.pt{
+	padding:0px 2px 0px 90px;
+	margin-left:8px;
+	width:px;
+}
+.pch{
+  margin: 2px 0px;
+  width:473px;
+  border: 1px solid transparent;
+  overflow:hidden;
+  text-overflow: ellipsis;
+}
+.chclass{
+	vertical-align:middle;
+	position:relative;
+	width:474px;
+	padding:0px 0px 1px 0px;
+	display:block;
+	overflow:hidden;
+	border-radius:6px;
+}
+#MenuCh{
+	position:absolute;
+	padding:3px 7px 3px 7px;
+	margin:0px;
+	left:218px;
+	border:1px solid gray;
+	width:256px;
+	height:px;  
+	height-max:710px;
+	overflow:hidden;
+	font-size:21px;
+	border-radius:6px;
+	  background-image: url('../img/title_fon.png');
+}
+
+.psearch{	
+	padding:3x 3px 3px 2px;	
+	margin:0px;
+	width:383px;
+	white-space: nowrap;
+	line-height:px;
+}
+
+.menuchannel{	
+	padding:3x 3px 3px 2px;	
+	margin:0px;
+	white-space: nowrap;
+	line-height:px;
+	overflow:hidden;
+}
+#main
+{
+     position: absolute;
+     left:0px; top:0px;
+     width:961px;height:541px;
+     font-size:22px;
+}
+#pr
+{
+     position: absolute;
+     left:0px; top:0px;
+     width:961px;height:541px;
+}
+input {
+	font-size:21px;
+	width:376px;
+}
+#vk
+{
+     position: absolute;
+     left:151px; 
+     top:328px;
+     width:px;
+     height:px;
+     z-index:2;
+}
+.buttons img{
+	margin:14px 3px 0px 0px;
+}
+.buttons{	
+	float:left;
+	width:49px;
+	height:46px;
+	background-image: url(../img/lg_keyboard_buttons.png);
+	background-position: -4px -4px;
+	font-size:29px;
+	line-height:46px;
+	text-align: center;
+	vertical-align: middle;
+	text-decoration: none;
+	color: #fff;
+	border:none;
+}
+#QualCh{
+	position:absolute;
+	padding:6px 2px 6px 2px;
+	margin:0px;
+	left:337px;
+	top:166px;
+	border:1px solid gray;
+	width:px;
+	height:px;  
+	z-index:1;
+	height-max:410px;
+	overflow:hidden;
+	font-size:25px;
+	border-radius:7px;
+	background-image: url('../img/title_fon.png');
+}
+#bstatus{
+	 float:right;
+	 padding:6px 5px 0px 5px;
+	 margin:4px;
+	 text-align:right;
+	 vertical-align:middle;
+	 width:91px;
+	 font-size:18px;
+	 height:21px;
+}
+.btext{
+	padding-top:2px;
+}
+.pttk{
+	position:absolute;
+	top:473px;
+	left:33px;
+	font-size:19px;
+	text-align:center;
+	width:892px;
+	z-index:2;
+	color:#EEEEEE;
+}
+.pstream div{
+	margin-right:8px;
+}
+.pstream{
+	position:absolute;
+	top:7px;
+	left:19px;
+	font-size:19px;
+	text-align:left;
+	z-index:2;
+	color:#EEEEEE;
+}
+#jtv
+{
+	position: absolute;
+	top:318px;
+	padding:2px 10px 3px 10px;
+	margin:0px;
+	height:67px;
+	font-size:11px;
+	width:px;
+	text-align:left;
+	background-image: url('../img/title_fon.png');
+	overflow:hidden;
+}
+
+#bottom img
+{
+	height:23px;
+	width:23px;
+	position: static;
+	float:left;
+	padding:5px 2px 0px 10px;
+	margin-top:0px;
+}
+#bottom
+{
+	margin:0px 15px;
+	position: absolute;
+	top:511px;
+	padding:0px 0px 0px 0px;
+	height:31px;
+	width:938px;
+	text-align:left;
+	overflow:hidden;
+}
+
+#reserve img{
+	padding-top:4px;	
+	padding-left:10px;
+	float:left;
+}
+#reserve{
+	width:19px;
+	display:none;	
+}
+
+#remote img{
+	float:left;
+	padding-top:4px;
+}
+#remote{
+	padding-left:844px;
+	width:19px;
+	display:block;	
+}
+#top .widget_title
+{
+	width:623px;
+	height:25px;
+	overflow:hidden;
+	left:19px;
+	position: absolute;
+	font-weight:bold;
+}
+
+#leftHalf{	
+	width:px;
+	height:481px;
+	position:absolute;
+	left:10px;
+	top:60px;
+	overflow:hidden;
+}
+.razd{
+	padding:2px 3px 0px 2px;
+}
+#top2load
+{
+	z-index:4;
+	margin:0px 12px;
+	position: absolute;
+	top:31px;
+	height:31px;
+	width:4px;
+	border-radius:4px;
+}
+.insetType div{
+	height:25px;	
+	overflow:hidden;
+	white-space: nowrap;
+}
+.insetType{
+	margin: 0px 2px;
+	padding:0px 0px;
+	width:132px;
+	border-radius:4px;
+	height:25px;
+	border:2px solid transparent;
+	background-image: url('../img/insetOff.png');
+	float:right;
+}
+#inset img{
+	float:left;
+	padding:0px 3px 0px 0px;
+}
+#inset
+{
+	margin:0px 12px;
+	position: absolute;
+	top:1px;
+	padding-top:2px;
+	height:28px;
+	width:601px;
+	overflow:hidden;
+	text-align:left;
+}
+#top2
+{
+	margin:0px 12px;
+	position: absolute;
+	top:32px;
+	padding-top:3px;
+	height:27px;
+	width:943px;
+	font-size:19px;
+	border-radius:4px;
+	background-image: url('../img/title_fon.png');
+	overflow:hidden;
+	white-space: nowrap;
+}
+.top2text
+{
+	padding:4px 5px 0px 0px;
+	white-space: nowrap;
+	overflow:hidden;
+}
+
+#top
+{
+	position: absolute;
+	top:3px;
+	padding:2px 3px 0px 3px;
+	height:22px;
+	width:px;
+}
+#top #widget_date
+{
+	left:627px;
+	position: absolute;
+	font-weight:bold;
+}
+
+#top #widget_time
+{	
+	width:43px;
+	height:20px;
+	left:871px;
+	position: absolute;
+	font-weight:bold;
+	background-repeat: no-repeat;
+}
+
+
+#rightHalf
+{
+    position: absolute;
+    left:487px; top:61px;
+    width:472px; 
+    height:451px;
+}
+#infoList
+{
+	position:absolute;
+	border-radius:4px;
+	padding:0px 4px;
+    width:459px; 
+	max-height:451px;
+	font-size:17px;
+	line-height:px;	
+	background-image: url('../img/title_fon2.png');
+
+}
+#statusbar
+{
+    height:px;
+	padding:5px;
+    left:10px;
+    position: absolute;
+    top:4px;
+    width:px;
+	text-align:left;
+	font-size:14px;
+}

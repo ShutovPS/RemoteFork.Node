@@ -1,0 +1,319 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+#player{
+	position: absolute;
+	margin:0px;
+	width:100%;
+	height:100%;
+	left:0px;
+	top:0px;
+	padding:0px;
+	font-size:26px;
+}
+.pttk{
+    float: left;
+    margin-top: -1.5%;
+    margin-left: 1%;
+    text-align: center;
+    width: 98%;
+    z-index: 2;
+    color: #EEEEEE;
+    clear: both;
+}
+.pstream div{
+	margin-right:8px;
+}
+.pstream{
+	position:absolute;
+	left:0px;
+	top:0px;
+	padding-left:1%;
+	padding-top:1%;
+	font-size:96%;
+	text-align:left;
+	z-index:2;
+	color:#EEEEEE;
+}
+#epg_full{
+    width: 57%;
+    height: 52%;
+    top: 9%;
+    left: 22%;
+    display: none;
+    position: absolute;
+    overflow: hidden;
+    font-size: 85%;
+}
+#exit_text{
+	background-size: cover;
+}
+#qual_text{
+	font-size: 15px; 
+	text-align: center; 
+	padding-top: 0px; 
+	background-size: cover;
+}
+#progname{
+	float:left;
+	font-size:95%;
+	overflow: hidden;
+    width: 15%;	
+}
+#info_num{
+	 float:left;
+	 width:5%;
+	 font-size:120%;
+	 padding-top: 1%;
+}
+#info_right{
+    float: right;
+    width: 19%;
+    font-size: 75%;
+    padding-top: 3%;
+	overflow:hidden;'
+}
+#recovery{
+	 color:#111;
+	 background-color:#eee;
+	 z-index:1;
+	 font-size:55%;
+	 text-align:center;
+	 margin-top: -40%;
+    display: none;
+    text-align: center;
+    width: 100%;
+}
+#arrow{
+	width: 1.2%;   
+	height: 6%;
+	margin-top: -1%;
+	background-image: url(../img/arrow.png);
+	background-size: cover; 
+	display: none; 
+	position: absolute;
+}
+#arrowtime{
+	margin-top: -2.5%;
+	padding: 1px;
+	height: 18px;
+	font-size: 18px;
+	text-align: center;
+	background-color: black;
+	position: absolute;
+}
+/******************* Control buttons of movie player *************************/
+
+.panelbox /************ Добавил ************/
+{
+	background: url(../imgplayer/player_playerbg.png);
+	height: 55%;
+	width: 100%;
+	padding:4px 0px 0px 0px;
+	margin:0px;	
+} 
+
+
+
+.playerBottom
+{
+	position:absolute;
+	bottom:0px;
+	width:100%;
+	height:22%;	
+	
+}
+
+/******************** Высота иконок ****************/
+
+.playerButtonLayout
+{
+	margin:0px;
+	width:100%;
+	height:100%;
+}
+/************** CSS for Button layout   *******************/
+#buttonLayout
+{
+	 background: url(../imgplayer/player_playerbg1.png);
+  	 width:100%;
+  	 height:45%;
+}
+
+#buttonLayout ul 
+{
+	 width: 75%;
+	 height: 100%;
+	 margin: 0% 0% 0% 12.5%;
+	 padding:0px;
+}
+
+/******************** Размер кнопки ****************/
+
+#buttonLayout ul li
+{
+	display:inline;
+	height:100%;    /******************** Размер кнопки (Фокуса), высота ****************/
+	float:left;
+	list-style:none;
+	width:12.5%
+
+
+}
+
+.stopButtonHover, .playButtonHover, .forwardButtonHover, .rewindButtonHover, .optionButtonHover, .prevButtonHover, .nextButtonHover
+{
+background-image:url(../imgplayer/player_btn/btn_focus_center.png);
+}
+
+/******************** Центровка иконок плеера (высота)****************/
+img.center
+{
+	width: 46%;
+	display:block;
+	margin:2% auto 0% auto;
+
+}
+
+.imgTextCenter
+{
+	display:block;
+	margin:11px 30px 18px 30px;
+	
+}
+.textCenter
+{
+	margin-left:6px;
+	text-align:left;
+	
+}
+/************ CSS for progress bar ************/
+
+
+.progressBarStatus
+{
+	float:left;
+	height:12px;
+	background: #ad1c36;
+}
+
+/************ Кружок перемотки ************/
+.progressBall
+{
+    width: 20px;
+    height: 20px;
+    margin-top: -4px;
+    background: #ad1c36;
+    float: left;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+}
+.progressBallHover
+{
+    background: #d80027;
+}
+
+.progressBarLayout /************ Полоса буфера бэкграунда, смещение влево ************/
+{
+	width:100%;
+	height:12px;
+	background: url(../imgplayer/movie_progress_bar_bg.png);
+}
+
+/************ Полоса буфера************/
+.progressBuffer
+{
+	float: left;
+    height: 12px;
+	background:url(../imgplayer/movie_progress_bar_buffer.png); /************ Поменял ************/
+}
+/*******  CSS for running video information***********/
+.runningTime
+{
+	width: 19%;
+	padding-right: 1%;
+  	height: 27%;   
+  	 margin-top: 0.2%;
+    font-size: 100%;
+    color: rgb(203,0,32);
+    float: right;
+    text-align: right;
+}
+
+#remainingTime
+{
+	color:rgb(255,255,255); /************ Поменял ************/
+}
+#totalTime
+{
+	
+  color: #EEEEEE;
+}
+
+.runningMovieInfo
+{
+	height:27px;
+	width:1188px;
+	margin-right:20px;
+	position:absolute;
+	float:left;
+	
+}
+.runningMovieName
+{
+  width:950px;
+  height:27px;
+	float:left;
+	font-size:32px;
+	color:rgb(225,225,225);
+	text-align:left;
+
+}
+.runningMovieType
+{
+	width:218px;
+	height:27px;
+	float:right;
+	font-size:19px;
+	color:rgb(59,59,59);
+	text-align:right;
+	margin-right:20px;
+}
+/*******  CSS for Back & exit buttons***********/
+.keyHelp
+{
+	padding-right:1%;
+	padding-top:1%;
+	position:absolute;
+	right:0px;
+}
+.exitKey
+{
+	width:54px; /************ Поменял ************/
+	height:54px; /************ Поменял ************/
+	background:url(../imgplayer/keyhelp/Keyhelp_Btn_Exit_N.png) no-repeat; /************ Поменял ************/
+	float:right;
+}
+.exitKeyHover
+{
+	width:54px; /************ Поменял ************/
+	height:54px; /************ Поменял ************/
+	background:url(../imgplayer/keyhelp/Keyhelp_Btn_Exit_F.png) no-repeat; /************ Поменял ************/
+	float:right;
+}
+.backKey
+{
+	width:54px; /************ Поменял ************/
+	height:54px; /************ Поменял ************/
+	background:url(../imgplayer/keyhelp/Keyhelp_Btn_Back_N.png) no-repeat; /************ Поменял ************/
+	float:left;
+}
+.backKeyHover
+{
+	width:54px; /************ Поменял ************/
+	height:54px; /************ Поменял ************/
+	background:url(../imgplayer/keyhelp/Keyhelp_Btn_Back_F.png) no-repeat; /************ Поменял ************/
+	float:left;
+}
