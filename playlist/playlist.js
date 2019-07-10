@@ -1,5 +1,7 @@
 module.exports = class PlayList {
 	constructor(playList) {
+		this.all_local = "directly";
+
 		this.Items = [];
 
 		this.IsIptv = false;
@@ -39,7 +41,7 @@ module.exports = class PlayList {
 			headers = {};
 		}
 
-		headers["Content-Type"] = "text/json";
+		headers["Content-Type"] = "text/json; charset=utf-8";
 
 		const json = JSON.stringify(this);
 
@@ -80,6 +82,13 @@ module.exports = class PlayList {
 	}
 	get PlaylistName() {
 		return this.playlist_name;
+	}
+
+	set Description(value) {
+		this.all_description = value;
+	}
+	get Description() {
+		return this.all_description;
 	}
 
 	set Title(value) {

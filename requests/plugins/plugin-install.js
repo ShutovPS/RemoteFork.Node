@@ -20,13 +20,12 @@ const pluginsPath = "/plugins/";
 router.post("/:pluginId", async function(req, res) {
     let data = [];
     req.on("data", chunk => {
+        console.log(KEY, req.params.pluginId, chunk.length);
         data.push(chunk);
     });
     req.on("end", async () => {
         await processZip(res, req.params.pluginId, Buffer.concat(data));
-        return;
     });
-    res.end();
 });
 
 router.get("/:pluginId", async function(req, res) {
@@ -48,15 +47,12 @@ router.get("/:pluginId", async function(req, res) {
 });
 
 async function processZip(res, pluginId, buffer) {
-    const sendError = (error) => {
-        console.error("processZip", error);
-
-        res.error = error;
-        res.end(error.message);
-    };
+    console.log(KEY, pluginId, buffer.length);
 
     try {
         const d = await unzipper.Open.buffer(buffer);
+
+        console.log(KEY, "UNZIPPED:", d);
     
         let needRename = true;
         let firstName = undefined;
@@ -90,21 +86,22 @@ async function processZip(res, pluginId, buffer) {
             localPath = path.join(localPath, pluginId);
         }
 
-        try {
-            const p = await d.extract({path: localPath});
-            
-            if (needRename) {
-                localPath = path.join(localPath, pluginId);
-            }
-
-            plugins.registerPlugin(localPath);
-
-            console.log(KEY, p);
-            res.end(pluginId);
-        } catch(error) {
-            sendError(error);
+        const p = await d.extract({path: localPath});
+        console.log(KEY, "EXTRACTED:", p);
+        
+        if (needRename) {
+            localPath = path.join(localPath, pluginId);
         }
+
+        plugins.registerPlugin(localPath);
+
+        console.log(KEY, "INSTALLED:", localPath);
+
+        res.end(pluginId);
     } catch(error) {
-        sendError(error);
+        console.error(KEY, "processZip", error);
+
+        res.error = error;
+        res.end(error.message);
     }
 }

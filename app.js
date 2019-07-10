@@ -49,10 +49,23 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(cookieParser());
 
+/*app.use(function(req, res, next) {
+    if (req.method === "OPTIONS") {
+        res.setHeader("Access-Control-Allow-Origin", "*");
+        res.setHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS");
+        res.setHeader("Access-Control-Allow-Headers","Accept, Content-Type");
+        res.end();
+    } else {
+        next();
+    }
+});*/
+
 app.use(function (req, res, next) {
     console.log(req.originalUrl);
 
     res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods","POST, GET, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers","Accept, Content-Type");
 
     analytics.trackEvent(req.method, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
 
@@ -124,7 +137,7 @@ app.use(function(err, req, res, next) {
 app.use(function(err, req, res, next) {
     logger.error(err);
 
-    analytics.trackEvent(err.message, req.path, req.originalUrl, req.rawHeaders, req.query.box_mac);
+    analytics.trackEvent("ERROR", err.message, req.originalUrl, req.rawHeaders, req.query.box_mac);
 
     //next(err);
 });
